@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transfer API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f6ff;
+            color: #1a237e;
+        }
+
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1565c0;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.25rem;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.6rem;
+            font-size: 1rem;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px;
+        }
+
+        button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #1565c0;
+        }
+
+        .response {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 6px;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            margin: 2rem auto;
+            color: #90a4ae;
+        }
+
+        pre {
+            background-color: #f1f8ff;
+            padding: 1rem;
+            border-left: 4px solid #2196f3;
+            overflow-x: auto;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Transfer Service API Interface</h1>
+</header>
+
+<div class="container">
+    <h2>Transfer Form</h2>
+    <form id="transferForm">
+        <label for="sourceAccount">Source Account Number</label>
+        <input type="text" id="sourceAccount" required>
+
+        <label for="destinationAccount">Destination Account Number</label>
+        <input type="text" id="destinationAccount" required>
+
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" step="0.01" required>
+
+        <button type="submit">Transfer</button>
+    </form>
+
+    <div class="response" id="responseBox"></div>
+</div>
+
+<div class="container">
+    <h2>Example JSON</h2>
+    <pre>{
+  "sourceAccount": "80801215",
+  "destinationAccount": "80811215",
+  "amount": 100.0
+}</pre>
+</div>
+
+<footer>
+    &copy; 2025 Transfer Service API | DinayaJW
+</footer>
+
+<script>
+    document.getElementById('transferForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const data = {
+            sourceAccount: document.getElementById('sourceAccount').value,
+            destinationAccount: document.getElementById('destinationAccount').value,
+            amount: parseFloat(document.getElementById('amount').value)
+        };
+
+        fetch('/api/transfer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.text())
+            .then(message => {
+                const responseBox = document.getElementById('responseBox');
+                responseBox.textContent = message;
+                responseBox.style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('responseBox').textContent = "Error: " + error;
+            });
+    });
+</script>
+
+</body>
+</html>
